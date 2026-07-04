@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Welcome to Leo Shen</title>
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html, body {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        font-family: 'Comic Sans MS', 'Chalkboard SE', 'Marker Felt', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    body {
+        position: relative;
+        background: #2a1810;
+    }
+
+    /* ===== 背景图：缓慢呼吸缩放 ===== */
+    .bg-wrap {
+        position: fixed;
+        inset: 0;
+        overflow: hidden;
+    }
+    .bg-layer {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 100%;
+        height: 100%;
+        transform: translate(-50%, -50%) scale(1);
+        background-image: url('background.png');
+        background-size: contain;
+        background-position: center;
+        background-repeat: no-repeat;
+        animation: breathe 12s ease-in-out infinite alternate;
+        transform-origin: center center;
+        will-change: transform;
+    }
+    @keyframes breathe {
+        0%   { transform: translate(-50%, -50%) scale(1); }
+        100% { transform: translate(-50%, -50%) scale(1.08); }
+    }
+
+    /* ===== 按钮：嵌入墙体色块 ===== */
+    .btn-wrap {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+    }
+
+    .color-block-btn {
+        position: absolute;
+        pointer-events: auto;
+        text-decoration: none;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+                    filter 0.3s ease;
+        animation: blockPop 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+    }
+    .color-block-btn:hover {
+        transform: scale(1.12);
+        filter: brightness(1.15) drop-shadow(0 8px 24px rgba(0,0,0,0.5));
+    }
+    @keyframes blockPop {
+        from { opacity: 0; transform: scale(0.6) rotate(-5deg); }
+        to   { opacity: 1; transform: scale(1) rotate(0); }
+    }
+
+    /* 背单词 — 左侧红色墙体色块 */
+    .btn-words {
+        top: 42%;
+        left: 3.5%;
+        width: 11%;
+        aspect-ratio: 0.48 / 1;
+        animation-delay: 0.3s;
+    }
+    .btn-words .block-face {
+        width: 100%;
+        height: 100%;
+        background: #e63946;
+        border: 3px solid #1a1a1a;
+        border-radius: 4px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        box-shadow:
+            inset -6px 0 0 rgba(0,0,0,0.25),
+            inset 0 -6px 0 rgba(0,0,0,0.2),
+            4px 6px 0 rgba(0,0,0,0.35);
+        transform: perspective(600px) rotateY(18deg);
+        transform-origin: left center;
+    }
+    .btn-words .block-icon {
+        font-size: clamp(1.2rem, 2.2vw, 2.4rem);
+        margin-bottom: 0.3em;
+    }
+    .btn-words .block-text {
+        font-size: clamp(0.7rem, 1.3vw, 1.4rem);
+        font-weight: 900;
+        color: #fff;
+        text-shadow:
+            2px 2px 0 #1a1a1a,
+            -1px -1px 0 #1a1a1a,
+            1px -1px 0 #1a1a1a,
+            -1px 1px 0 #1a1a1a;
+        letter-spacing: 0.12em;
+        text-align: center;
+        writing-mode: vertical-rl;
+        padding: 0.4em 0;
+    }
+    .btn-words .block-en {
+        font-size: clamp(0.45rem, 0.75vw, 0.85rem);
+        color: rgba(255,255,255,0.85);
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        margin-top: 0.4em;
+        text-shadow: 1px 1px 0 rgba(0,0,0,0.5);
+    }
+
+    /* 写曲谱 — 右侧橙色墙体色块 */
+    .btn-music {
+        top: 42%;
+        right: 3.5%;
+        width: 11%;
+        aspect-ratio: 0.48 / 1;
+        animation-delay: 0.5s;
+    }
+    .btn-music .block-face {
+        width: 100%;
+        height: 100%;
+        background: #ff7f27;
+        border: 3px solid #1a1a1a;
+        border-radius: 4px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        box-shadow:
+            inset 6px 0 0 rgba(0,0,0,0.25),
+            inset 0 -6px 0 rgba(0,0,0,0.2),
+            -4px 6px 0 rgba(0,0,0,0.35);
+        transform: perspective(600px) rotateY(-18deg);
+        transform-origin: right center;
+    }
+    .btn-music .block-icon {
+        font-size: clamp(1.2rem, 2.2vw, 2.4rem);
+        margin-bottom: 0.3em;
+    }
+    .btn-music .block-text {
+        font-size: clamp(0.7rem, 1.3vw, 1.4rem);
+        font-weight: 900;
+        color: #fff;
+        text-shadow:
+            2px 2px 0 #1a1a1a,
+            -1px -1px 0 #1a1a1a,
+            1px -1px 0 #1a1a1a,
+            -1px 1px 0 #1a1a1a;
+        letter-spacing: 0.12em;
+        text-align: center;
+        writing-mode: vertical-rl;
+        padding: 0.4em 0;
+    }
+    .btn-music .block-en {
+        font-size: clamp(0.45rem, 0.75vw, 0.85rem);
+        color: rgba(255,255,255,0.85);
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        margin-top: 0.4em;
+        text-shadow: 1px 1px 0 rgba(0,0,0,0.5);
+    }
+
+    /* 色块内部小装饰：模拟手绘质感 */
+    .block-face::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background:
+            repeating-linear-gradient(
+                45deg,
+                rgba(255,255,255,0.06) 0px,
+                rgba(255,255,255,0.06) 2px,
+                transparent 2px,
+                transparent 8px
+            );
+        pointer-events: none;
+        border-radius: 2px;
+    }
+
+    /* ===== 底部律动波形条（呼应音乐感） ===== */
+    .floor-bars {
+        position: fixed;
+        bottom: 8%;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 6px;
+        align-items: end;
+        height: 40px;
+        z-index: 5;
+        pointer-events: none;
+        opacity: 0.75;
+    }
+    .floor-bar {
+        width: 5px;
+        border-radius: 3px 3px 1px 1px;
+        background: #fff;
+        border: 1.5px solid #1a1a1a;
+        transform-origin: bottom;
+        animation: floorWave 1.3s ease-in-out infinite;
+    }
+    .floor-bar:nth-child(1) { animation-delay: 0s;    height: 50%; background: #e63946; }
+    .floor-bar:nth-child(2) { animation-delay: 0.15s; height: 95%; background: #ffd60a; }
+    .floor-bar:nth-child(3) { animation-delay: 0.3s;  height: 40%; background: #4ecdc4; }
+    .floor-bar:nth-child(4) { animation-delay: 0.45s; height: 80%; background: #3a86ff; }
+    .floor-bar:nth-child(5) { animation-delay: 0.6s;  height: 60%; background: #8338ec; }
+    .floor-bar:nth-child(6) { animation-delay: 0.75s; height: 90%; background: #e63946; }
+    .floor-bar:nth-child(7) { animation-delay: 0.9s;  height: 45%; background: #ffd60a; }
+    @keyframes floorWave {
+        0%, 100% { transform: scaleY(0.5); }
+        50%      { transform: scaleY(1); }
+    }
+
+    /* ===== 响应式 ===== */
+    @media (max-width: 768px) {
+        .btn-words {
+            top: 40%;
+            left: 2%;
+            width: 16%;
+        }
+        .btn-music {
+            top: 40%;
+            right: 2%;
+            width: 16%;
+        }
+        .btn-words .block-text,
+        .btn-music .block-text {
+            font-size: clamp(0.65rem, 1.8vw, 1.1rem);
+        }
+        .floor-bars { bottom: 6%; height: 30px; }
+    }
+
+    @media (max-width: 480px) {
+        .btn-words .block-text,
+        .btn-music .block-text {
+            font-size: 0.75rem;
+            letter-spacing: 0.08em;
+        }
+        .btn-words .block-en,
+        .btn-music .block-en {
+            display: none;
+        }
+    }
+</style>
+</head>
+<body>
+    <div class="bg-wrap">
+        <div class="bg-layer"></div>
+    </div>
+
+    <div class="btn-wrap">
+        <!-- 背单词：嵌入左侧红色墙体色块 -->
+        <a href="reciteplus.html" target="_blank" rel="noopener" class="color-block-btn btn-words" title="背单词">
+            <div class="block-face">
+                <div class="block-icon">📚</div>
+                <div class="block-text">背单词</div>
+                <div class="block-en">VOCAB</div>
+            </div>
+        </a>
+
+        <!-- 写曲谱：嵌入右侧橙色墙体色块 -->
+        <a href="musicscore.html" target="_blank" rel="noopener" class="color-block-btn btn-music" title="写曲谱">
+            <div class="block-face">
+                <div class="block-icon">🎵</div>
+                <div class="block-text">写曲谱</div>
+                <div class="block-en">MUSIC</div>
+            </div>
+        </a>
+    </div>
+
+    <!-- 底部律动条 -->
+    <div class="floor-bars">
+        <div class="floor-bar"></div>
+        <div class="floor-bar"></div>
+        <div class="floor-bar"></div>
+        <div class="floor-bar"></div>
+        <div class="floor-bar"></div>
+        <div class="floor-bar"></div>
+        <div class="floor-bar"></div>
+    </div>
+</body>
+</html>
