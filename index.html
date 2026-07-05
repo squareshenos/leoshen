@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Welcome to Leo Shen</title>
+<link rel="preload" href="background.webp" as="image" type="image/webp">
 <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -32,13 +33,27 @@
         width: 100%;
         height: 100%;
         transform: translate(-50%, -50%) scale(1);
-        background-image: url('background.png');
         background-size: contain;
         background-position: center;
         background-repeat: no-repeat;
         animation: breathe 12s ease-in-out infinite alternate;
         transform-origin: center center;
         will-change: transform;
+    }
+    .bg-layer.low-quality {
+        background-image: url('background-placeholder.webp');
+        filter: blur(15px);
+        transform: translate(-50%, -50%) scale(1.05);
+        z-index: 1;
+    }
+    .bg-layer.high-quality {
+        background-image: url('background.webp');
+        opacity: 0;
+        z-index: 2;
+        transition: opacity 0.8s ease-in-out;
+    }
+    .bg-layer.high-quality.loaded {
+        opacity: 1;
     }
     @keyframes breathe {
         0%   { transform: translate(-50%, -50%) scale(1); }
@@ -265,7 +280,8 @@
 </head>
 <body>
     <div class="bg-wrap">
-        <div class="bg-layer"></div>
+        <div class="bg-layer low-quality"></div>
+        <div class="bg-layer high-quality" id="bgHighQuality"></div>
     </div>
 
     <div class="btn-wrap">
@@ -298,5 +314,20 @@
         <div class="floor-bar"></div>
         <div class="floor-bar"></div>
     </div>
+
+    <script>
+        (function() {
+            var bgImg = new Image();
+            bgImg.onload = function() {
+                var highQualityLayer = document.getElementById('bgHighQuality');
+                if (highQualityLayer) {
+                    requestAnimationFrame(function() {
+                        highQualityLayer.classList.add('loaded');
+                    });
+                }
+            };
+            bgImg.src = 'background.webp';
+        })();
+    </script>
 </body>
 </html>
